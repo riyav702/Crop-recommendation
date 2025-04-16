@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Prediction Result</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body {
+      background: linear-gradient(to right, #f0f4e3, #eaf5d5);
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      color: #333;
+    }
+
+    .result-box {
+      background: white;
+      padding: 40px;
+      border-radius: 20px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+      max-width: 650px;
+      width: 90%;
+      text-align: center;
+      animation: fadeInSlide 0.8s ease-in-out;
+      position: relative;
+    }
+
+    @keyframes fadeInSlide {
+      from { opacity: 0; transform: translateY(40px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    h2 {
+      color: #556B2F;
+      font-size: 2rem;
+      margin-bottom: 10px;
+    }
+
+    .crop-name {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: #6B8E23;
+      margin-bottom: 20px;
+    }
+
+    .crop-icon {
+      font-size: 3rem;
+      margin-bottom: 10px;
+      animation: popIn 0.6s ease forwards;
+    }
+
+    @keyframes popIn {
+      0% { transform: scale(0.5); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    .fact-box {
+      background: #f4faec;
+      padding: 20px;
+      border-radius: 12px;
+      font-size: 0.95rem;
+      margin-top: 20px;
+      color: #444;
+      box-shadow: inset 0 0 8px #dfe8d4;
+    }
+
+    canvas {
+      margin-top: 40px;
+      background: radial-gradient(circle, #f8fef3 0%, #ffffff 80%);
+      padding: 20px;
+      border-radius: 20px;
+    }
+
+    a {
+      display: inline-block;
+      margin-top: 20px;
+      color: #6B8E23;
+      font-weight: bold;
+      text-decoration: none;
+      transition: 0.3s ease;
+    }
+
+    a:hover {
+      color: #3c5f1c;
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+
+<div class="result-box">
+  <h2>🌾 Predicted Crop</h2>
+
+  {% if predicted_crop %}
+    <div class="crop-icon">🌱</div>
+    <p class="crop-name">{{ predicted_crop }}</p>
+
+    <canvas id="nutrientChart" width="400" height="250"></canvas>
+
+    <div class="fact-box" id="factBox">
+      <!-- Crop fact will be inserted via JavaScript -->
+    </div>
+
+    <a href="{{ url_for('weather') }}?city={{ city }}">📍 See Weather for </a><br>
+    <a href="/">← Go Back</a>
+
+    <script>
+      const nitrogen = {{ N|tojson }};
+      const phosphorus = {{ P|tojson }};
+      const potassium = {{ K|tojson }};
+      const cropName = "{{ predicted_crop }}".toLowerCase();
+
+      const ctx = document.getElementById('nutrientChart').getContext('2d');
+
+      new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: ['Nitrogen', 'Phosphorus', 'Potassium'],
+          datasets: [{
+            label: 'Your Input',
+            data: [parseFloat(nitrogen), parseFloat(phosphorus), parseFloat(potassium)],
+            backgroundColor: ['#4caf50', '#81c784', '#c8e6c9'],
+            borderColor: ['#388e3c', '#66bb6a', '#81c784'],
+            borderWidth: 1
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            title: {
+              display: true,
+              text: 'Nutrient Levels (NPK)',
+              color: '#556B2F',
+              font: { size: 18 }
+            },
+            legend: { display: false }
+          },
+          scales: {
+            y: {
+              beginAtZero: true,
+              title: { display: true, text: 'Value', color: '#444' },
+              ticks: { color: '#444' }
+            },
+            x: { ticks: { color: '#444' } }
+          }
+        }
+      });
+
+      // Fun facts about crops
+      const cropFacts = {
+        "rice": "Rice is a staple food for over half of the world’s population.",
+        "wheat": "Wheat is one of the oldest cultivated crops in human history.",
+        "maize": "Maize is not just a food crop—it’s also used in biofuel and plastics!",
+        "cotton": "Cotton seeds are used to make oil, while the lint is used in textiles.",
+        "sugarcane": "Sugarcane is the world’s largest crop by production quantity.",
+        "millet": "Millets are climate-resilient and rich in iron and fiber.",
+        "banana": "Bananas grow on giant herbs, not trees!",
+        "mango": "Mango is known as the ‘King of Fruits’ in India.",
+        "jute": "Jute is called the ‘Golden Fiber’ of India."
+      };
+
+      const factBox = document.getElementById('factBox');
+      if (cropFacts[cropName]) {
+        factBox.innerText = "🌟 Fun Fact: " + cropFacts[cropName];
+      } else {
+        factBox.innerText = "🌟 Fun Fact: Did you know your crop is part of a diverse agricultural system!";
+      }
+    </script>
+
+  {% else %}
+    <p>No matching crop found. Try adjusting input values.</p>
+    <a href="/">← Go Back</a>
+  {% endif %}
+</div>
+
+</body>
+</html>

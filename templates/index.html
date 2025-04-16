@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crop Recommendation</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        /* Reset some default browser styles */
+        html, body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: 'Segoe UI', sans-serif;
+            color: #333;
+        }
+
+        body {
+            background-color: #f0f4e3; /* Creamish background */
+            overflow: auto; /* Allow scrolling if content overflows */
+        }
+
+        .tagline {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            transform: translateY(-50%);
+            font-size: 2rem;
+            color: #6B8E23;
+            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.3);
+            display: flex;
+            justify-content: space-between;
+            padding: 0 20px;
+            font-weight: 600;
+            z-index: 0;
+        }
+
+        .tagline .left,
+        .tagline .right {
+            flex: 1;
+            text-align: center; /* Center tagline text */
+        }
+
+        .tagline .left {
+            text-align: left;
+        }
+
+        .tagline .right {
+            text-align: right;
+        }
+
+        .recommendation-section {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh; /* Ensure at least full viewport height */
+            z-index: 1;
+            padding-top: 60px; /* Adjust padding to avoid overlap with potential fixed elements */
+            padding-bottom: 60px;
+            box-sizing: border-box; /* Include padding in element's total width and height */
+        }
+
+        .recommendation-box {
+            background-color: rgba(255, 255, 255, 0.9); /* Semi-transparent white */
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 600px;
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            z-index: 2;
+        }
+
+        .recommendation-box:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 16px 32px rgba(0, 0, 0, 0.15);
+        }
+
+        .recommendation-box h2 {
+            margin-bottom: 30px;
+            color: #556B2F;
+            font-weight: 600;
+            font-size: 2.5rem;
+            padding-bottom: 10px;
+            /* Explicitly ensure visibility */
+            display: block !important;
+            visibility: visible !important;
+            opacity: 1 !important;
+        }
+
+        .form-control {
+            margin-bottom: 20px;
+            border-radius: 8px;
+            padding: 12px;
+            font-size: 1rem;
+            transition: box-shadow 0.3s ease;
+            width: 100%;
+            box-sizing: border-box; /* Include padding and border in element's total width and height */
+        }
+
+        .form-control:focus {
+            box-shadow: 0 0 8px rgba(107, 142, 35, 0.7); /* Focus effect */
+        }
+
+        .btn-submit {
+            background-color: #6B8E23;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            font-size: 16px;
+            border-radius: 8px;
+            width: 100%;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-submit:hover {
+            background-color: #556B2F;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        /* Error Message Styling */
+        .error-message {
+            color: #e74c3c;
+            margin-bottom: 20px;
+            font-size: 0.875rem;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="tagline">
+        <div class="left">Empowering Farmers</div>
+        <div class="right">One Crop at a Time</div>
+    </div>
+
+    <section class="recommendation-section">
+        <div class="recommendation-box">
+            <h2>Crop Recommendation System</h2>
+
+            <form action="/predict" method="POST">
+                <div class="input-group">
+                    <input type="text" name="N" class="form-control" placeholder="Nitrogen (N)" required>
+                </div>
+                <div class="input-group">
+                    <input type="text" name="P" class="form-control" placeholder="Phosphorus (P)" required>
+                </div>
+                <div class="input-group">
+                    <input type="text" name="K" class="form-control" placeholder="Potassium (K)" required>
+                </div>
+                <div class="input-group">
+                    <input type="text" name="temperature" class="form-control" placeholder="Temperature (°C)" required>
+                </div>
+                <div class="input-group">
+                    <input type="text" name="humidity" class="form-control" placeholder="Humidity (%)" required>
+                </div>
+                <div class="input-group">
+                    <input type="text" name="pH" class="form-control" placeholder="Soil pH" required>
+                </div>
+                <div class="input-group">
+                    <input type="text" name="rainfall" class="form-control" placeholder="Rainfall (mm)" required>
+                </div>
+
+                <input type="submit" value="Predict Crop" class="btn-submit">
+            </form>
+        </div>
+    </section>
+
+</body>
+</html>

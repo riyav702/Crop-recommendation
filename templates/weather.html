@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather and Crop Recommendations</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="weather-container">
+        <h2>Weather Information for {{ city }}</h2>
+
+        {% if weather_data %}
+        <div class="weather-info">
+            <div class="weather-card">
+                <h3>Temperature: {{ weather_data.temperature }}°C</h3>
+                <p>Humidity: {{ weather_data.humidity }}%</p>
+                <p>Description: {{ weather_data.description }}</p>
+                <img src="http://openweathermap.org/img/wn/{{ weather_data.icon }}.png" alt="Weather Icon" />
+            </div>
+        </div>
+        
+        <div class="recommendations">
+            <h3>Recommended Crops Based on Current Weather:</h3>
+            <ul>
+                {% for crop in crops %}
+                    <li>{{ crop }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        {% else %}
+            <p class="error">{{ error }}</p>
+        {% endif %}
+
+        <div class="back-button">
+            <a href="/">← Back to Home</a>
+        </div>
+    </div>
+
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #e0f2f1, #f4f4f4);
+            height: 100vh;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(10px);
+            box-sizing: border-box;
+        }
+
+        .weather-container {
+            width: 80%;
+            margin: 50px auto;
+            padding: 20px;
+            text-align: center;
+            background-color: rgba(255, 255, 255, 0.25);
+            border-radius: 20px;
+            box-shadow: 0 10px 35px rgba(0, 128, 0, 0.2);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        h2 {
+            color: green;
+            margin-bottom: 30px;
+            font-size: 28px;
+            letter-spacing: 1px;
+        }
+
+        .weather-info {
+            display: flex;
+            justify-content: center;
+            margin-top: 30px;
+        }
+
+        .weather-card {
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(0, 128, 0, 0.15);
+            max-width: 300px;
+            text-align: left;
+            margin: 10px;
+        }
+
+        .weather-card h3 {
+            color: green;
+        }
+
+        .weather-card p {
+            font-size: 18px;
+            color: #34495e;
+        }
+
+        .weather-card img {
+            width: 50px;
+            margin-top: 10px;
+        }
+
+        .recommendations {
+            margin-top: 40px;
+            text-align: left;
+        }
+
+        .recommendations h3 {
+            color: green;
+        }
+
+        .recommendations ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
+
+        .recommendations li {
+            font-size: 18px;
+            color: green;
+        }
+
+        .error {
+            color: #e74c3c;
+            font-size: 18px;
+        }
+
+        .back-button a {
+            text-decoration: none;
+            color: green;
+            font-size: 18px;
+            padding: 10px 15px;
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 5px;
+            margin-top: 20px;
+            display: inline-block;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .back-button a:hover {
+            background-color: darkgreen;
+            color: white;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(0.98);
+                opacity: 0.15;
+            }
+
+            50% {
+                transform: scale(1);
+                opacity: 0.25;
+            }
+
+            100% {
+                transform: scale(0.98);
+                opacity: 0.15;
+            }
+        }
+    </style>
+</body>
+</html>
